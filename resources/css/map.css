@@ -1,8 +1,8 @@
 .county-map-container {
   position: absolute;
-  bottom: 0;
+  top: 0;
   width: 100%;
-  height: 65%;
+  height: 100%;
 }
 .county-map {
   width: 100%;
@@ -23,12 +23,4 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   pointer-events: none;
-}
-
-#my-text {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  height: 20pt;
 }
