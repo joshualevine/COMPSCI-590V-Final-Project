@@ -1,23 +1,34 @@
 .county-map-container {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 65%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 65%;
 }
 .county-map {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
+.counties {
+    fill: rgb(88, 145, 88);
+}
 .counties :hover {
-    fill: red;
+  fill: red;
 }
 
 .county-borders {
-    fill: none;
-    stroke: #fff;
-    stroke-width: 0.5px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    pointer-events: none;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+#my-text {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  height: 20pt;
 }
