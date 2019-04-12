@@ -97,6 +97,7 @@ function createMap() {
         return d.y;
       })
       .attr('r', (d) => {
+        if (isNaN(d.x) || isNaN(d.y)) return 0;
         let r = Math.max(1, Math.round(Math.random() * 8));
         return r;
       })
@@ -109,6 +110,7 @@ function randomizeCircles() {
     .transition()
     .duration(1000)
     .attr('r', (d) => {
+      if (isNaN(d.x) || isNaN(d.y)) return 0;
       let r = Math.max(1, Math.round(Math.random() * 8));
       return r;
     });
