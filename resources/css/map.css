@@ -1,0 +1,31 @@
+.county-map-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.county-map {
+  width: 100%;
+  height: 100%;
+}
+
+.counties {
+    fill: rgb(88, 145, 88);
+}
+.counties :hover {
+  fill: red;
+}
+
+.county-circle {
+  fill: red;
+  opacity: 0.5;
+}
+
+.county-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
