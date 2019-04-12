@@ -1,11 +1,58 @@
 // load county data
-const counties = {};
-d3.csv('/data/county.csv', (data) => {
-  for (let row of data) {
-    while (row.FIPS.length < 5) row.FIPS = '0' + row.FIPS;
-    counties[row.FIPS] = row;
+// const counties = {};
+// d3.csv('/data/county.csv', (data) => {
+//   for (let row of data) {
+//     while (row.FIPS.length < 5) row.FIPS = '0' + row.FIPS;
+//     counties[row.FIPS] = row;
+//   }
+// });
+
+function prepareDataForCircles(us) {
+  // for each county, compute signed area of all polgyons and select largest one
+  let data = topojson.feature(us, us.objects.counties).features;
+  let counties = [];
+  for (let county of data) {
+    let points = [];
+    let maxArea = 0;
+    for (let polygon of county.geometry.coordinates) {
+      if (typeof polygon[0][0] === 'object') polygon = polygon[0];
+      let area = 0;
+      for (let i = 0; i < polygon.length - 1; i++) {
+        let p1 = polygon[i];
+        let p2 = polygon[i + 1];
+        area += (p1[0] * p2[1] - p2[0] * p1[1]);
+      }
+      if (area > maxArea) {
+        maxArea = area * 0.5;
+        points = JSON.parse(JSON.stringify(polygon));
+      }
+    }
+    counties.push({
+      area: maxArea,
+      points: points
+    });
   }
-});
+
+  // for each county, compute x and y position on map of centroid
+  for (let county of counties) {
+    let x = 0;
+    let y = 0;
+    for (let i = 0; i < county.points.length - 1; i++) {
+      let p1 = county.points[i];
+      let p2 = county.points[i + 1];
+      x += ((p1[0] + p2[0]) * (p1[0] * p2[1] - p2[0] * p1[1]));
+      y += ((p1[1] + p2[1]) * (p1[0] * p2[1] - p2[0] * p1[1]));
+    }
+    x *= (1 / (6 * county.area));
+    y *= (1 / (6 * county.area));
+    county.x = x;
+    county.y = y;
+    delete county.area;
+    delete county.points;
+  }
+
+  return counties;
+}
 
 function createMap() {
   var svgMap = d3.select('.county-map');
@@ -39,57 +86,36 @@ function createMap() {
       .append('g')
       .attr('class', 'circles')
       .selectAll('circle')
-      .data(topojson.feature(us, us.objects.counties).features)
+      .data(prepareDataForCircles(us))
       .enter()
       .append('circle')
+      .attr('class', 'county-circle')
       .attr('cx', (d) => {
-        let points = d.geometry.coordinates[0];
-        while (typeof points[0][0] !== 'number') points = points[0];
-        let C_x = 0;
-        let A = 0;
-        for (let i in points.slice(0, points.length - 1)) {
-          i = parseInt(i);
-          let p1 = points[i];
-          let p2 = points[i + 1];
-          if (p2 === points[0]) break;
-          A += (p1[0] * p2[1] - p2[0] * p1[1]);
-        }
-        A *= 0.5;
-        for (let i in points.slice(0, points.length - 1)) {
-          i = parseInt(i);
-          let p1 = points[i];
-          let p2 = points[i + 1];
-          if (p2 === points[0]) break;
-          C_x += ((p1[0] + p2[0]) * (p1[0] * p2[1] - p2[0] * p1[1]));
-        }
-        C_x *= (1 / (6 * A));
-        return C_x;
+        return d.x;
       })
       .attr('cy', (d) => {
-        let points = d.geometry.coordinates[0];
-        while (typeof points[0][0] !== 'number') points = points[0];
-        let C_y = 0;
-        let A = 0;
-        for (let i in points.slice(0, points.length - 1)) {
-          i = parseInt(i);
-          let p1 = points[i];
-          let p2 = points[i + 1];
-          if (p2 === points[0]) break;
-          A += (p1[0] * p2[1] - p2[0] * p1[1]);
-        }
-        A *= 0.5;
-        for (let i in points.slice(0, points.length - 1)) {
-          i = parseInt(i);
-          let p1 = points[i];
-          let p2 = points[i + 1];
-          if (p2 === points[0]) break;
-          C_y += ((p1[1] + p2[1]) * (p1[0] * p2[1] - p2[0] * p1[1]));
-        }
-        C_y *= (1 / (6 * A));
-        return C_y;
+        return d.y;
       })
-      .attr('r', 2);
+      .attr('r', (d) => {
+        let r = Math.max(1, Math.round(Math.random() * 8));
+        return r;
+      })
   });
 }
 
+function randomizeCircles() {
+  d3.select('.county-map')
+    .selectAll('circle')
+    .transition()
+    .duration(1000)
+    .attr('r', (d) => {
+      let r = Math.max(1, Math.round(Math.random() * 8));
+      return r;
+    });
+}
+
 createMap();
+
+setInterval(() => {
+  randomizeCircles();
+}, 2000);

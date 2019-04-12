@@ -16,6 +16,11 @@
   fill: red;
 }
 
+.county-circle {
+  fill: red;
+  opacity: 0.5;
+}
+
 .county-borders {
   fill: none;
   stroke: #fff;
