@@ -8,14 +8,21 @@
   <link type="text/css" href="./resources/css/map.css" rel="stylesheet">
   <script type="text/javascript" src="./resources/js/d3.v4.min.js"></script>
   <script type="text/javascript" src="./resources/js/topojson.v2.min.js"></script>
+  <script type="text/javascript" src="./resources/js/data.js"></script>
+  <script type="text/javascript" src="./resources/js/correlation.js"></script>
+  <script type="text/javascript" src="./resources/js/heatmap.js"></script>
 </head>
 
 <body>
+  <div class="heatmap-container">
+    <svg viewBox="0 0 500 500" class="heatmap"></svg>
+  </div>
   <div class="county-map-container">
     <svg viewBox="0 0 960 600" class="county-map"></svg>
   </div>
 
-  <script type="text/javascript" src="./resources/js/map.js"></script>
+  <script type="text/javascript" src="./resources/js/index.js"></script>
+  <!--<script type="text/javascript" src="./resources/js/map.js"></script>-->
 </body>
 
 </html>
