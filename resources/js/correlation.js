@@ -3,7 +3,7 @@ const correlation = function(x, y){
     let yVar = d3.variance(y);
     let xy = [];
     for(let i=0; i<x.length; i++){
-        xy.push(xVar[i] + yVar[i]);
+        xy.push(x[i] + y[i]);
     }
     let xyVar = d3.variance(xy);
     let cov = (xyVar - xVar - yVar)/2;
