@@ -31,19 +31,24 @@ const makeHeatmap = function(data, variables){
         .padding(padding);
     heatmap.append('g')
         .attr("transform", "translate(0," + heatmapH + ") rotate(-90)")
-        .call(d3.axisLeft(x));
+        .call(d3.axisLeft(x))
+        .selectAll("text")
+        .attr("class", "heatmap-axis-text");
 
     var y = d3.scaleBand()
         .range([ heatmapH, 0 ])
         .domain(variables)
         .padding(padding);
     heatmap.append("g")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y))
+        .selectAll("text")
+        .attr("class", "heatmap-axis-text");
 
-    heatmap.selectAll("corr")
+    heatmap.selectAll("rect")
         .data(heatmapData, function(d) {return d.x+':'+d.y;})
         .enter()
         .append("rect")
+        .attr("class", "heatmap-cell")
         .attr("x", function(d) { return x(d.x) })
         .attr("y", function(d) { return y(d.y) })
         .attr("width", x.bandwidth() )
@@ -83,6 +88,21 @@ const makeHeatmap = function(data, variables){
                 selectedElem = this;
             }
         });
+    
+    heatmap.selectAll("text")
+        .data(heatmapData, function(d) {return d.x+':'+d.y;})
+        .enter()
+        .append("text")
+        .attr("class", "heatmap-cell-text")
+        .text(function(d) {
+            return Math.round(d.value * 100) / 100;
+        })
+        .attr("x", function(d, i) {
+            return x(d.x) + x.bandwidth() / 2;
+        })
+        .attr("y", function(d) {
+            return y(d.y) + y.bandwidth() / 2;
+        })
 }
 
 const makeHeatmapData = function(data){

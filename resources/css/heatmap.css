@@ -1,0 +1,9 @@
+.heatmap-cell-text{
+    alignment-baseline: middle;
+    text-anchor: middle;
+    stroke: black;
+    fill: white;
+    font-family: Arial;
+    font-size: 25px;
+    pointer-events: none;
+}
