@@ -1,6 +1,5 @@
 const importData = function(csv){
     return new Promise((resolve) => {
-        data = {};
         d3.csv(csv, function(d){
             let county = {};
             county["County"] = d["County"];
@@ -22,6 +21,17 @@ const importData = function(csv){
                 }
             });
             resolve(dataArrays);
+        });
+    });
+}
+
+const importVariables = function(csv){
+    return new Promise((resolve) => {
+        d3.csv(csv, function(data){
+            let variables = {};
+            data.forEach(function(d){
+                variables[d["Variable Code"]] = d;
+            });
         });
     });
 }
