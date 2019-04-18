@@ -4,6 +4,9 @@
     stroke: black;
     fill: white;
     font-family: Arial;
-    font-size: 25px;
     pointer-events: none;
+}
+
+.heatmap-axis-text{
+    font-size: 10px;
 }
