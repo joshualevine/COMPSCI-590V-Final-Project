@@ -1,10 +1,11 @@
+const heatMinLight = 40; 
+
 function makeHeatmap(data, variables){
 
     let correlations = calcCorrelations(data, variables);
     let heatmapData = makeHeatmapData(correlations);
-    const margin = {top: 20, right: 20, bottom: 80, left: 80};
+    const margin = {top: 20, right: 20, bottom: 110, left: 110};
     const padding = 0.02;
-    const minLightness = 40; 
 
     let svg = d3.select(".heatmap-container")
                 .select("svg");
@@ -56,7 +57,7 @@ function makeHeatmap(data, variables){
         .attr("stroke-width", "1%")
         .attr("fill", function(d) { 
             let lightness = Math.round((1-Math.abs(d.value)) * 
-                                        (100 - minLightness)) + minLightness;
+                                        (100 - heatMinLight)) + heatMinLight;
             return "hsl(240,100%," + lightness + "%)";
         })
         .attr("stroke", function(d) {
@@ -94,6 +95,7 @@ function makeHeatmap(data, variables){
         .enter()
         .append("text")
         .attr("class", "heatmap-cell-text")
+        .attr("font-size", Math.round(x.bandwidth()/2.5) + "px")
         .text(function(d) {
             return Math.round(d.value * 100) / 100;
         })
@@ -102,6 +104,22 @@ function makeHeatmap(data, variables){
         })
         .attr("y", function(d) {
             return y(d.y) + y.bandwidth() / 2;
+        });
+}
+
+function updateHeatmap(data, variables){
+    let correlations = calcCorrelations(data, variables);
+    let heatmapData = makeHeatmapData(correlations);
+    d3.select(".heatmap-container")
+        .selectAll(".heatmap-cell")
+        .data(heatmapData, function(d) {return d.x+':'+d.y;})
+        .transition()
+        .duration(1000)
+        .ease(d3.easeLinear)
+        .attr("fill", function(d) { 
+            let lightness = Math.round((1-Math.abs(d.value)) * 
+                                        (100 - heatMinLight)) + heatMinLight;
+            return "hsl(240,100%," + lightness + "%)";
         })
 }
 
