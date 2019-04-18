@@ -1,4 +1,4 @@
-const correlation = function(x, y){
+function correlation(x, y){
     let xVar = d3.variance(x);
     let yVar = d3.variance(y);
     let xy = [];
@@ -10,7 +10,7 @@ const correlation = function(x, y){
     return cov / (Math.sqrt(xVar * yVar));
 }
 
-const calcCorrelations = function(data, variables){
+function calcCorrelations(data, variables){
     let correlations = [];
     for(let variable of variables){
         correlations.push({'var':variable});

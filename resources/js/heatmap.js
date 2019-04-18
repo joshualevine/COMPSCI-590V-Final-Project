@@ -1,4 +1,4 @@
-const makeHeatmap = function(data, variables){
+function makeHeatmap(data, variables){
 
     let correlations = calcCorrelations(data, variables);
     let heatmapData = makeHeatmapData(correlations);
@@ -105,7 +105,7 @@ const makeHeatmap = function(data, variables){
         })
 }
 
-const makeHeatmapData = function(data){
+function makeHeatmapData(data){
     heatmapData = [];
     for(let elem of data){
         let variable = elem['var'];

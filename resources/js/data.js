@@ -1,4 +1,4 @@
-const importData = function(csv){
+function importData(csv){
     return new Promise((resolve) => {
         d3.csv(csv, function(d){
             let county = {};
@@ -25,7 +25,7 @@ const importData = function(csv){
     });
 }
 
-const importVariables = function(csv){
+function importVariables(csv){
     return new Promise((resolve) => {
         d3.csv(csv, function(data){
             let variables = {};
