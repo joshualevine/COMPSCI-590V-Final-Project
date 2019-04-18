@@ -9,6 +9,7 @@ function importData(csv){
             for (let [property, value] of Object.entries(d)){
                 county[property] = +value;
             }
+            return county;
         },function(data){
             let properties = Object.keys(data[0]);
             let dataArrays = {};
@@ -32,6 +33,7 @@ function importVariables(csv){
             data.forEach(function(d){
                 variables[d["Variable Code"]] = d;
             });
+            resolve(variables);
         });
     });
 }
