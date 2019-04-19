@@ -9,6 +9,7 @@ let heatmapVar = Object.keys(heatmapTestData);
 let selection;
 let variableData;
 let data;
+let correlations;
 
 let dataImport = importData("/data/insecurity.csv");
 
@@ -20,4 +21,5 @@ Promise.all([dataImport, variableDataImport]).then(
 		variableData = results[1];
 		let variables = Object.keys(data).slice(3);
 		makeHeatmap(data, variables);
+		//makeForceGraph(correlations, variables);
 	});

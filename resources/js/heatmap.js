@@ -2,7 +2,7 @@ const heatMinLight = 40;
 
 function makeHeatmap(data, variables){
 
-    let correlations = calcCorrelations(data, variables);
+    correlations = calcCorrelations(data, variables);
     let heatmapData = makeHeatmapData(correlations);
     const margin = {top: 20, right: 20, bottom: 110, left: 110};
     const padding = 0.02;
@@ -96,7 +96,12 @@ function makeHeatmap(data, variables){
                     .attr("stroke", "none");
                 selectedCell = this;
             }
-        });
+        })
+        .append("title")
+		.text(function(d) {
+            return variableData[d.x]["Variable Name"] + "\n" +
+                   variableData[d.y]["Variable Name"] ;
+		});
     
     heatmap.selectAll("text")
         .data(heatmapData, function(d) {return d.x+':'+d.y;})
