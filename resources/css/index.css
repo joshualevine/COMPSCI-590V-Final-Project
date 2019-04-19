@@ -25,34 +25,33 @@
 }
 
 .heatmap-container{
-  height: 50%;
-  width: 30%;
-  top: 0px;
-  left: 0px;
-  position: relative;
+  height: 49%;
+  width: 29%;
+  top: 1%;
+  left: 1%;
+  position: absolute;
   float: left;
 }
 
 .county-map-container{
-  height: 100%;
-  width: 70%;
-  top: 0px;
-  right: 0px;
-  position: relative;
+  height: 98%;
+  width: 69%;
+  top: 1%;
+  right: 1%;
+  position: absolute;
   float: right;
 }
 
-.visualization{
-  height: 100%;
-  width: 100%;
+.misc-container{
+  height: 49%;
+  width: 29%;
+  bottom: 1%;
+  left: 1%;
   position: absolute;
-  margin: 0;
-  padding: 8px;
-  box-sizing: border-box;
+  float: left;
 }
 
 svg{
-  position: relative;
   height: 100%;
   width: 100%;
 }

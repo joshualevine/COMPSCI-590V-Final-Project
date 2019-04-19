@@ -7,14 +7,17 @@ let heatmapTestData = {'a':[1,2,3,4,5,6,7,8,9,10],
 let heatmapVar = Object.keys(heatmapTestData);
 
 let selection;
+let variableData;
+let data;
 
-let data = importData("/data/insecurity.csv");
+let dataImport = importData("/data/insecurity.csv");
 
-data.then(
-	function(data){
+let variableDataImport = importVariables("/data/variables.csv");
+
+Promise.all([dataImport, variableDataImport]).then(
+	function(results) {
+		data = results[0];
+		variableData = results[1];
 		let variables = Object.keys(data).slice(3);
 		makeHeatmap(data, variables);
-	}
-);
-
-//makeHeatmap(heatmapTestData, heatmapVar);
+	});
