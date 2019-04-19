@@ -14,8 +14,8 @@ function makeHeatmap(data, variables){
     const svgHeight = +svg.attr('viewBox').split(" ")[3];
     const size = Math.min(svgWidth, svgHeight);
 
-    var selectedVar = data[0];
-    var selectedElem;
+    var selection = heatmapData[0];
+    let selectedCell;
 
     let heatmap = svg.append("g")
                 .attr("transform", "translate(" + 
@@ -34,7 +34,11 @@ function makeHeatmap(data, variables){
         .attr("transform", "translate(0," + heatmapH + ") rotate(-90)")
         .call(d3.axisLeft(x))
         .selectAll("text")
-        .attr("class", "heatmap-axis-text");
+        .attr("class", "heatmap-axis-text")
+        .append("title")
+		.text(function(d) {
+			return variableData[d]["Variable Name"];
+		});
 
     var y = d3.scaleBand()
         .range([ heatmapH, 0 ])
@@ -43,7 +47,11 @@ function makeHeatmap(data, variables){
     heatmap.append("g")
         .call(d3.axisLeft(y))
         .selectAll("text")
-        .attr("class", "heatmap-axis-text");
+        .attr("class", "heatmap-axis-text")
+        .append("title")
+		.text(function(d) {
+			return variableData[d]["Variable Name"];
+		});
 
     heatmap.selectAll("rect")
         .data(heatmapData, function(d) {return d.x+':'+d.y;})
@@ -61,8 +69,8 @@ function makeHeatmap(data, variables){
             return "hsl(240,100%," + lightness + "%)";
         })
         .attr("stroke", function(d) {
-            if(d == selectedVar){
-                selectedElem = this;
+            if(d == selection){
+                selectedCell = this;
                 return "red";
             }else{
                 return "none";
@@ -73,7 +81,7 @@ function makeHeatmap(data, variables){
                 .attr("stroke", "black");
         })
         .on("mouseout", function(d) {
-            if(this != selectedElem){
+            if(this != selectedCell){
                 d3.select(this)
                     .attr("stroke", "none");
             }else{
@@ -82,11 +90,11 @@ function makeHeatmap(data, variables){
             }
         })
         .on("click", function(d) {
-            if(this != selectedElem){
-                selectedVar = d;
-                d3.select(selectedElem)
+            if(this != selectedCell){
+                selection = d;
+                d3.select(selectedCell)
                     .attr("stroke", "none");
-                selectedElem = this;
+                selectedCell = this;
             }
         });
     
