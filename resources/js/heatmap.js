@@ -14,7 +14,7 @@ function makeHeatmap(data, variables){
     const svgHeight = +svg.attr('viewBox').split(" ")[3];
     const size = Math.min(svgWidth, svgHeight);
 
-    var selection = heatmapData[0];
+    selection = heatmapData[0];
     let selectedCell;
 
     let heatmap = svg.append("g")
@@ -96,6 +96,7 @@ function makeHeatmap(data, variables){
                     .attr("stroke", "none");
                 selectedCell = this;
             }
+            renderCircles();
         })
         .append("title")
 		.text(function(d) {
