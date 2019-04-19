@@ -1,0 +1,12 @@
+.heatmap-cell-text{
+    alignment-baseline: middle;
+    text-anchor: middle;
+    stroke: black;
+    fill: white;
+    font-family: Arial;
+    pointer-events: none;
+}
+
+.heatmap-axis-text{
+    font-size: 10px;
+}
