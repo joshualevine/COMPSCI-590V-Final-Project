@@ -7,6 +7,7 @@ function makeHeatmap(data, variables){
     const margin = {top: 20, right: 20, bottom: 110, left: 110};
     const padding = 0.02;
 
+    //Get svg for reference
     let svg = d3.select(".heatmap-container")
                 .select("svg");
 
@@ -14,18 +15,20 @@ function makeHeatmap(data, variables){
     const svgHeight = +svg.attr('viewBox').split(" ")[3];
     const size = Math.min(svgWidth, svgHeight);
 
-    var selection = heatmapData[0];
+    selection = heatmapData[0];
     let selectedCell;
 
+    //Add heatmap to svg
     let heatmap = svg.append("g")
                 .attr("transform", "translate(" + 
                     (margin.left + (svgWidth - size)/2) + "," + 
                     (margin.top + (svgHeight - size)/2) + ")");
 
-    
+    //Calculate heatmap dimensions
     const heatmapW = size - margin.left - margin.right;
     const heatmapH = size - margin.top - margin.bottom;
 
+    //Add x axis
     let x = d3.scaleBand()
         .range([0, heatmapW])
         .domain(variables)
@@ -40,6 +43,7 @@ function makeHeatmap(data, variables){
 			return variableData[d]["Variable Name"];
 		});
 
+    //Add y axis
     var y = d3.scaleBand()
         .range([ heatmapH, 0 ])
         .domain(variables)
@@ -53,6 +57,7 @@ function makeHeatmap(data, variables){
 			return variableData[d]["Variable Name"];
 		});
 
+    //Create heatmap cells
     heatmap.selectAll("rect")
         .data(heatmapData, function(d) {return d.x+':'+d.y;})
         .enter()
@@ -66,7 +71,11 @@ function makeHeatmap(data, variables){
         .attr("fill", function(d) { 
             let lightness = Math.round((1-Math.abs(d.value)) * 
                                         (100 - heatMinLight)) + heatMinLight;
-            return "hsl(240,100%," + lightness + "%)";
+            let hue = 0;
+            if(d.value>0){
+                hue = 240;
+            }
+            return "hsl(" + hue + ",100%," + lightness + "%)"
         })
         .attr("stroke", function(d) {
             if(d == selection){
@@ -103,6 +112,7 @@ function makeHeatmap(data, variables){
                    variableData[d.y]["Variable Name"] ;
 		});
     
+    //Add text displaying correlation to heatmap cells
     heatmap.selectAll("text")
         .data(heatmapData, function(d) {return d.x+':'+d.y;})
         .enter()
@@ -132,7 +142,11 @@ function updateHeatmap(data, variables){
         .attr("fill", function(d) { 
             let lightness = Math.round((1-Math.abs(d.value)) * 
                                         (100 - heatMinLight)) + heatMinLight;
-            return "hsl(240,100%," + lightness + "%)";
+            let hue = 0;
+            if(d.value>0){
+                hue = 240;
+            }
+            return "hsl(" + hue + ",100%," + lightness + "%)";
         })
 }
 
