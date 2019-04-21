@@ -1,6 +1,7 @@
 let mouseDownPoint;
 let countyPoints = [];
 let selectedCounties = [];
+let currentMapTransform;
 
 let mode = 'select'; // select or zoom
 let selectType = 'box'; // box or click
@@ -122,7 +123,8 @@ function createMap() {
       })
       .on('zoom', () => {
         if (mode === 'zoom') {
-          container.attr('transform', d3.event.transform);
+          currentMapTransform = d3.event.transform;
+          container.attr('transform', currentMapTransform);
         } else {
           mapMouseMove();
         }
@@ -156,12 +158,15 @@ function renderCircles() {
 }
 
 function mapMouseDown() {
-  mouseDownPoint = d3.mouse(d3.select('.county-map').node());
+  let point = d3.mouse(d3.select('.county-map').node());
+  point = transformZoomPoint(point);
+  mouseDownPoint = point;
 }
 
 function mapMouseMove() {
   if (mouseDownPoint && mode === 'select' && selectType === 'box') {
     let point = d3.mouse(d3.select('.county-map').node());
+    point = transformZoomPoint(point);
     let x = 0,
       y = 0,
       w = 0,
@@ -221,4 +226,15 @@ function selectMapButton(cls) {
     select.style.backgroundColor = 'white';
     zoom.style.backgroundColor = 'rgb(135, 142, 202)';
   }
+}
+
+function transformZoomPoint(point) {
+  if (currentMapTransform) {
+    let x = currentMapTransform.x,
+      y = currentMapTransform.y,
+      k = currentMapTransform.k;
+    point[0] = (point[0] - x) / k;
+    point[1] = (point[1] - y) / k;
+  }
+  return point;
 }
