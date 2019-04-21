@@ -24,7 +24,7 @@
   line-height: 20px;
 }
 
-.heatmap-container{
+.heatmap-container {
   height: 49%;
   width: 29%;
   top: 1%;
@@ -33,7 +33,7 @@
   float: left;
 }
 
-.county-map-container{
+.county-map-container {
   height: 98%;
   width: 69%;
   top: 1%;
@@ -42,7 +42,38 @@
   float: right;
 }
 
-.misc-container{
+.map-options {
+  position: absolute;
+  height: 35px;
+  width: 100%;
+  top: 0;
+  text-align: center;
+}
+
+.options-text {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.options-select {
+  display: inline-block;
+  border-radius: 8px;
+  margin-right: 5px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgb(135, 142, 202);
+  border: 1px solid black;
+}
+
+.options-zoom {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.misc-container {
   height: 49%;
   width: 29%;
   bottom: 1%;
@@ -51,7 +82,7 @@
   float: left;
 }
 
-svg{
+svg {
   height: 100%;
   width: 100%;
 }
