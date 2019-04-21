@@ -105,6 +105,7 @@ function makeHeatmap(data, variables){
                     .attr("stroke", "none");
                 selectedCell = this;
             }
+            renderCircles();
         })
         .append("title")
 		.text(function(d) {

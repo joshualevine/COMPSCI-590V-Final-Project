@@ -21,5 +21,6 @@ Promise.all([dataImport, variableDataImport]).then(
 		variableData = results[1];
 		let variables = Object.keys(data).slice(3);
 		makeHeatmap(data, variables);
+		createMap();
 		//makeForceGraph(correlations, variables);
 	});

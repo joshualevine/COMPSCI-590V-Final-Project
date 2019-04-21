@@ -1,12 +1,3 @@
-// load county data
-// const counties = {};
-// d3.csv('/data/county.csv', (data) => {
-//   for (let row of data) {
-//     while (row.FIPS.length < 5) row.FIPS = '0' + row.FIPS;
-//     counties[row.FIPS] = row;
-//   }
-// });
-
 function prepareDataForCircles(us) {
   // for each county, compute signed area of all polgyons and select largest one
   let data = topojson.feature(us, us.objects.counties).features;
@@ -73,7 +64,8 @@ function createMap() {
       .data(topojson.feature(us, us.objects.counties).features)
       .enter()
       .append('path')
-      .attr('d', mapPath);
+      .attr('class', 'county-path')
+      .attr('d', mapPath)
 
     // create the county borders
     svgMap
@@ -95,27 +87,44 @@ function createMap() {
       })
       .attr('cy', (d) => {
         return d.y;
-      })
-      .attr('r', (d) => {
-        let r = Math.max(1, Math.round(Math.random() * 8));
-        return r;
-      })
+      });
+
+    renderCircles();
   });
 }
 
-function randomizeCircles() {
+function renderCircles() {
+  console.log('RENDERING!');
+  let size = data[selection.x];
+  let color = data[selection.y];
+  let minS = Math.min(...size);
+  let maxS = Math.max(...size);
+  let minC = Math.min(...color);
+  let maxC = Math.max(...color);
   d3.select('.county-map')
     .selectAll('circle')
     .transition()
     .duration(1000)
-    .attr('r', (d) => {
-      let r = Math.max(1, Math.round(Math.random() * 8));
+    .attr('fill', (d, i) => {
+      let o = 127 + Math.round(128 * ((color[i] - minC) / (maxC - minC)));
+      return 'rgb(0, 0, ' + o + ')';
+    })
+    .attr('r', (d, i) => {
+      if (isNaN(d.x) || isNaN(d.y)) return 0;
+      let r = 8 * ((size[i] - minS) / (maxS - minS));
       return r;
     });
 }
 
-createMap();
-
-setInterval(() => {
-  randomizeCircles();
-}, 2000);
+// function renderColors() {
+//   let values = data[selection.x];
+//   let min = Math.min(...values);
+//   let max = Math.max(...values);
+//   d3.select('.county-map')
+//     .selectAll('.county-path')
+//     .transition()
+//     .duration(1000)
+//     .attr('fill', (d, i) => {
+//       return 'rgb(0, 0, ' + Math.round(Math.random() * 255) + ')';
+//     });
+// }
