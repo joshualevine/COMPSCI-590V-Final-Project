@@ -62,7 +62,7 @@ function createMap() {
   var svgMap = d3.select('.county-map');
   var container = svgMap.append('g');
   var mapPath = d3.geoPath();
-  d3.json('/data/us-10m.v1.json', (error, us) => {
+  d3.json('data/us-10m.v1.json', (error, us) => {
     if (error) throw error;
 
     // alphabetize counties for easer sorted rendering later
