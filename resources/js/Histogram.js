@@ -6,7 +6,7 @@ let histogramHeight;
 
 function makeHistogram(){
   // set the dimensions and margins of the graph
-  let margin = {top: 30, right: 30, bottom: 30, left: 30};
+  let margin = {top: 30, right: 30, bottom: 50, left: 30};
   let width = 500 - margin.right - margin.left;
   let height = 500 - margin.bottom - margin.top;
   histogramHeight = height;
@@ -66,6 +66,14 @@ function makeHistogram(){
         .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
         .attr("height", function(d) { return height - y(d.length); })
         .style("fill", "#69b3a2");
+
+  svg.append("text")
+    .attr("class", "xlabel")             
+    .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                        (height + margin.top) + ")")
+    .style("text-anchor", "middle")
+    .text(variableData[selection.x]['Variable Name']);
 }
 
 function updateHistogram(){
