@@ -1,7 +1,7 @@
 function makeInfoView(){
 
     let div = d3.select('.infoview');
-    let totalSelected = 0;//d3.sum(selectedCounties);
+    let totalSelected = d3.sum(selectedCounties);
 
     let selectedVariables;
     if(selection.x == selection.y){
@@ -37,7 +37,6 @@ function makeInfoView(){
     }else if(totalSelected == 1){
 
         let selectedCounty;
-
         for(let i=0; i<selectedCounties.length; i++){
             if(selectedCounties[i]){
                 selectedCounty = i;
@@ -49,11 +48,11 @@ function makeInfoView(){
 
         div.append('div')
             .attr('class', 'infotitle')
-            .text(data['County'][i]);
+            .text(data['County'][selectedCounty]);
 
         div.append('div')
             .attr('class', 'infosubtitle')
-            .text(data['State'][i]);
+            .text(data['State'][selectedCounty]);
 
         div.selectAll('.infotext')
             .data(variables)
@@ -63,7 +62,7 @@ function makeInfoView(){
             .text(function(d){
                 return d + ': ' + data[d][selectedCounty]
             })
-            .attr('color', function(d){
+            .style('color', function(d){
                 let std = (data[d][selectedCounty] - dataInfo[d].mean)/
                             dataInfo[d].stdv;
                 let lightness = 50 - 50*(Math.abs(Math.tanh(std)));

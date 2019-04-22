@@ -359,5 +359,5 @@ function updateGlobalSelectedData() {
   }
   data.xSelected = xSelected;
   data.ySelected = ySelected;
-  updateSelections();
+  updateMiscGraph();
 }
