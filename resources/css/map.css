@@ -1,6 +1,14 @@
 .county-map {
+  position: absolute;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 40px);
+  bottom: 0;
+}
+
+.selection-rect {
+  fill: none;
+  stroke: black;
+  stroke-width: 2px;
 }
 
 .counties {

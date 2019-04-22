@@ -15,6 +15,7 @@
   <script type="text/javascript" src="./resources/js/heatmap.js"></script>
   <script type="text/javascript" src="./resources/js/forcegraph.js"></script>
   <script type="text/javascript" src="./resources/js/infoview.js"></script>
+  <script type="text/javascript" src="./resources/js/scatterplot.js"></script>
 </head>
 
 <body class="visualization">
@@ -22,11 +23,17 @@
     <svg viewBox="0 0 500 500" class="heatmap"></svg>
   </div>
   <div class="misc-container">
+    <!-- <svg viewBox="0 0 500 500" class="misc"></svg> -->
     <svg viewBox="0 0 500 500" class="misc"></svg>
     <div class="infoview-div"></div>
   </div>
   <div class="county-map-container">
     <svg viewBox="0 0 960 600" class="county-map"></svg>
+    <div class="map-options">
+      <div class="options-text">Map Options:</div>
+      <div onclick="selectMapButton('select')" class="options-select">Select</div>
+      <div onclick="selectMapButton('zoom')" class="options-zoom">Zoom / Pan</div>
+    </div>
   </div>
 
   <script type="text/javascript" src="./resources/js/map.js"></script>
