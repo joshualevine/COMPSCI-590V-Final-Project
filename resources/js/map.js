@@ -166,6 +166,7 @@ function createMap() {
         if (mode === 'zoom') {
           currentMapTransform = d3.event.transform;
           container.attr('transform', currentMapTransform);
+          scaleCircles();
         } else {
           mapMouseMove();
         }
@@ -196,7 +197,7 @@ function renderCircles() {
     .attr('r', (d, i) => {
       if (isNaN(d.x) || isNaN(d.y)) return 0;
       let r = 7 * ((size[i] - minS) / (maxS - minS)) + 1;
-      return r;
+      return r / ((currentMapTransform || {}).k || 1);
     });
 }
 
@@ -318,6 +319,7 @@ function selectMapButton(cls) {
     var container = d3.select('.county-map').select('g');
     container.attr('transform', d3.zoomIdentity);
     currentMapTransform = d3.zoomIdentity;
+    scaleCircles();
     d3.select('.county-map')
       .selectAll('.county-path')
       .attr('fill', (d, i) => {
@@ -363,4 +365,20 @@ function updateGlobalSelectedData() {
   data.xSelected = xSelected;
   data.ySelected = ySelected;
   updateMiscGraph();
+}
+
+function scaleCircles() {
+  let size = data[selection.x];
+  let color = data[selection.y];
+  let minS = Math.min(...size);
+  let maxS = Math.max(...size);
+  let minC = Math.min(...color);
+  let maxC = Math.max(...color);
+  d3.select('.county-map')
+    .selectAll('circle')
+    .attr('r', (d, i) => {
+      if (isNaN(d.x) || isNaN(d.y)) return 0;
+      let r = 7 * ((size[i] - minS) / (maxS - minS)) + 1;
+      return r / ((currentMapTransform || {}).k || 1);
+    });
 }

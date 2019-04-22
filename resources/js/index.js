@@ -13,7 +13,7 @@ let correlations;
 let dataInfo = {};
 let variables;
 
-let dataImport = importData('/data/insecurity.csv');
+let dataImport = importData('/data/socioeconimic.csv');
 
 let variableDataImport = importVariables('/data/variables.csv');
 

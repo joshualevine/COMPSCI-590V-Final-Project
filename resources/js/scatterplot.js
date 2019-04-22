@@ -91,8 +91,7 @@ function makeScatterPlot(){
 }
 
 function updateSelections(){
-    console.log('in here!');
-    scattermain.select(".dots")
+    main.select(".dots")
         .transition("changecolor")
         .selectAll("circle")
         .attr("fill", function(d,i){
