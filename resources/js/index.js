@@ -13,9 +13,9 @@ let correlations;
 let dataInfo = {};
 let variables;
 
-let dataImport = importData('/data/final_dataset.csv');
+let dataImport = importData('data/final_dataset.csv');
 
-let variableDataImport = importVariables('/data/variables.csv');
+let variableDataImport = importVariables('data/variables.csv');
 
 Promise.all([dataImport, variableDataImport]).then(
 	function(results) {
