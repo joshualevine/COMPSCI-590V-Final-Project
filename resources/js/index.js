@@ -11,9 +11,9 @@ let variableData;
 let data;
 let correlations;
 
-let dataImport = importData("/data/insecurity.csv");
+let dataImport = importData('/data/insecurity.csv');
 
-let variableDataImport = importVariables("/data/variables.csv");
+let variableDataImport = importVariables('/data/variables.csv');
 
 Promise.all([dataImport, variableDataImport]).then(
 	function(results) {
@@ -23,4 +23,5 @@ Promise.all([dataImport, variableDataImport]).then(
 		makeHeatmap(data, variables);
 		createMap();
 		//makeForceGraph(correlations, variables);
+		makeInfoView(data,variables);
 	});
