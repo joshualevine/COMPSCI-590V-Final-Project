@@ -16,6 +16,8 @@
   <script type="text/javascript" src="./resources/js/forcegraph.js"></script>
   <script type="text/javascript" src="./resources/js/infoview.js"></script>
   <script type="text/javascript" src="./resources/js/scatterplot.js"></script>
+  <script type="text/javascript" src="./resources/js/Histogram.js"></script>
+  <script type="text/javascript" src="./resources/js/miscgraph.js"></script>
 </head>
 
 <body class="visualization">
@@ -24,8 +26,18 @@
   </div>
   <div class="misc-container">
     <!-- <svg viewBox="0 0 500 500" class="misc"></svg> -->
-    <svg viewBox="0 0 500 500" class="misc"></svg>
-    <div class="infoview-div"></div>
+    <select id='mySelect' value="scatterplot" onchange="updateMiscGraph()">
+      <option value="scatterplot">Scatterplot</option>
+      <option value="histogram">Histogram</option>
+      <option value="infoview">More Details</option>
+    </select>
+    <div class="scatterplot misc">
+      <svg viewBox="0 0 500 500" class="misc-svg"></svg>
+    </div>
+    <div class="histogram misc">
+      <svg viewBox="0 0 500 500" class="misc-svg"></svg>
+    </div>
+    <div class="infoview misc"></div>
   </div>
   <div class="county-map-container">
     <svg viewBox="0 0 960 600" class="county-map"></svg>

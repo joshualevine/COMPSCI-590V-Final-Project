@@ -1,6 +1,6 @@
 const heatMinLight = 40; 
 
-function makeHeatmap(data, variables){
+function makeHeatmap(){
 
     correlations = calcCorrelations(data, variables);
     let heatmapData = makeHeatmapData(correlations);
@@ -133,7 +133,7 @@ function makeHeatmap(data, variables){
         });
 }
 
-function updateHeatmap(data, variables){
+function updateHeatmap(){
     let correlations = calcCorrelations(data, variables);
     let heatmapData = makeHeatmapData(correlations);
     d3.select('.heatmap-container')

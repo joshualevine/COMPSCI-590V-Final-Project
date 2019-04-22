@@ -35,9 +35,10 @@ function makeScatterPlot(){
         .range([ height, 0 ]);
 
     // the chart object, includes all margins
-    var chart = d3.select('.misc')
-    .attr('width', width + margin.right + margin.left)
-    .attr('height', height + margin.top + margin.bottom)
+    var chart = d3.select('.scatterplot')
+    .select('svg')
+    //.attr('width', width + margin.right + margin.left)
+    //.attr('height', height + margin.top + margin.bottom)
 
     // the main object where the chart and axis will be drawn
     main = chart.append('g')

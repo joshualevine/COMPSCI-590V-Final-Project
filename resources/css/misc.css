@@ -11,3 +11,18 @@
 .infosubtitle{
     font-size: 18px;
 }
+
+.misc{
+    
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#mySelect{
+    position: absolute;
+    top: -20px;
+    left: 0px;
+}
