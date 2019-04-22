@@ -73,15 +73,22 @@ function makeScatterPlot(){
     .attr("cy", function (d,i) { return y(ydata[i]); } )
     .attr("cx", function (d,i) { return x(xdata[i]); } )
     .attr("r", 5) // radius of circle
-    .attr("fill", function(d,i){
-        if(i < 1500){
-            return "red";
-        }
-        else{
-            return "blue";
-        }
-    })  
-    .style("opacity", 0.025);
+    .attr("fill", "black")  
+    .style("opacity", 0.075);
+}
+
+function updateSelections(){
+    main.select(".dots")
+        .transition()
+        .selectAll("circle")
+        .attr("fill", function(d,i){
+            if (selectedCounties[i] === 1){
+                return "red";
+            }
+            else{
+                return "black";
+            }
+        });
 }
 
 function updateScatterPlot(){
@@ -125,7 +132,6 @@ function updateScatterPlot(){
     main.select(".dots")
         .selectAll("circle")
         .transition()
-        .duration(300)
         .attr("cy", function (d,i) { return y(ydata[i]); } )
         .attr("cx", function (d,i) { return x(xdata[i]); } );
 }   
