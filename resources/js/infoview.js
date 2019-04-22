@@ -1,20 +1,6 @@
-let dataInfo = {};
+function makeInfoView(){
 
-function makeInfoView(data, variables){
-    if(dataInfo.size !== 0){
-        for(let variable of variables){
-            dataInfo[variable] = {
-                max: d3.max(data[variable]),
-                min: d3.min(data[variable]),
-                mean: Math.round(d3.mean(data[variable]) * 100)/100,
-                median: d3.median(data[variable]),
-                stdv: Math.round(Math.sqrt(
-                        d3.variance(data[variable])) * 100)/100
-            };
-        }
-    }
-
-    let div = d3.select('.infoview-div');
+    let div = d3.select('.infoview');
     let totalSelected = 0;//d3.sum(selectedCounties);
 
     let selectedVariables;
@@ -87,6 +73,6 @@ function makeInfoView(data, variables){
     }
 }
 
-function updateInfoView(data,variables){
-    makeInfoView(data,variables);
+function updateInfoView(){
+    makeInfoView();
 }
