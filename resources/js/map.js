@@ -113,6 +113,9 @@ function createMap() {
                 }
               }
             });
+          setTimeout(() => {
+            updateGlobalSelectedData();
+          }, 100);
         }
       });
 
@@ -171,6 +174,7 @@ function createMap() {
 }
 
 function renderCircles() {
+  updateGlobalSelectedData();
   let size = data[selection.x];
   let color = data[selection.y];
   let minS = Math.min(...size);
@@ -251,6 +255,9 @@ function mapMouseMove() {
           }
         }
       });
+    setTimeout(() => {
+      updateGlobalSelectedData();
+    }, 100);
   }
 }
 
@@ -260,6 +267,9 @@ function mapMouseUp() {
     .select('.selection-rect')
     .attr('width', 0)
     .attr('height', 0)
+  setTimeout(() => {
+    updateGlobalSelectedData();
+  }, 100);
 }
 
 function selectMapButton(cls) {
@@ -309,6 +319,9 @@ function selectMapButton(cls) {
       .attr('fill', (d, i) => {
         return colorCounty(i, 0);
       });
+    setTimeout(() => {
+      updateGlobalSelectedData();
+    }, 100);
   }
 }
 
@@ -331,4 +344,18 @@ function colorCounty(index, type) {
     selectedCounties[index] = 1;
     return 'red';
   }
+}
+
+function updateGlobalSelectedData() {
+  // update selected counties in global data structure
+  let xSelected = [],
+    ySelected = [];
+  for (let i = 0; i < data[selection.x].length; i++) {
+    if (selectedCounties[i] === 1) {
+      xSelected.push(data[selection.x][i]);
+      ySelected.push(data[selection.y][i]);
+    }
+  }
+  data.xSelected = xSelected;
+  data.ySelected = ySelected;
 }
