@@ -96,6 +96,7 @@ function makeHeatmap(data, variables){
                     .attr("stroke", "none");
                 selectedCell = this;
             }
+            updateScatterPlot();
             renderCircles();
         })
         .append("title")
