@@ -79,7 +79,6 @@ function makeScatterPlot(){
 }
 
 function updateSelections(){
-    console.log('in here!');
     main.select(".dots")
         .transition()
         .selectAll("circle")
