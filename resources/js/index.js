@@ -10,18 +10,30 @@ let selection;
 let variableData;
 let data;
 let correlations;
+let dataInfo = {};
+let variables;
 
-let dataImport = importData("/data/insecurity.csv");
+let dataImport = importData('/data/insecurity.csv');
 
-let variableDataImport = importVariables("/data/variables.csv");
+let variableDataImport = importVariables('/data/variables.csv');
 
 Promise.all([dataImport, variableDataImport]).then(
 	function(results) {
 		data = results[0];
 		variableData = results[1];
-		let variables = Object.keys(data).slice(3);
-		makeHeatmap(data, variables);
+		variables = Object.keys(data).slice(3);
+		for(let variable of variables){
+            dataInfo[variable] = {
+                max: d3.max(data[variable]),
+                min: d3.min(data[variable]),
+                mean: Math.round(d3.mean(data[variable]) * 100)/100,
+                median: d3.median(data[variable]),
+                stdv: Math.round(Math.sqrt(
+                        d3.variance(data[variable])) * 100)/100
+            };
+        }
+		makeHeatmap();
 		createMap();
-		makeScatterPlot();
 		//makeForceGraph(correlations, variables);
+		makeMiscGraph();
 	});
