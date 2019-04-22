@@ -66,7 +66,12 @@ function createMap() {
     if (error) throw error;
 
     // alphabetize counties for easer sorted rendering later
-    let d = us.objects.counties.geometries;
+    let d = [];
+    for (let item of us.objects.counties.geometries) {
+      if (data.FIPS.indexOf(parseInt(item.id)) > -1) {
+        d.push(item);
+      }
+    }
     d.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
     us.objects.counties.geometries = d;
 
