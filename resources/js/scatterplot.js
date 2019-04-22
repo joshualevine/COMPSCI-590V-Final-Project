@@ -79,11 +79,12 @@ function makeScatterPlot(){
 }
 
 function updateSelections(){
+    console.log('in here!');
     main.select(".dots")
         .transition()
         .selectAll("circle")
         .attr("fill", function(d,i){
-            if (selectedCounties[i] === 1){
+            if (selectedCounties[i] && selectedCounties[i] === 1){
                 return "red";
             }
             else{
@@ -135,4 +136,8 @@ function updateScatterPlot(){
         .transition()
         .attr("cy", function (d,i) { return y(ydata[i]); } )
         .attr("cx", function (d,i) { return x(xdata[i]); } );
+
+    setTimeout(() => {
+        updateSelections();
+    }, 10);
 }   
