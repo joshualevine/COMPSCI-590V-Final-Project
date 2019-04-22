@@ -51,6 +51,9 @@ function makeHistogram(){
 
   histogramY = y;
   // append the bar rectangles to the svg element
+  if(data.xSelected && data.xSelected.length > 0){
+    bins = histogram(data.xSelected);
+  }
   svg.selectAll("rect")
       .data(bins)
       .enter()
@@ -59,21 +62,21 @@ function makeHistogram(){
         .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
         .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
         .attr("height", function(d) { return height - y(d.length); })
-        .style("fill", "#69b3a2")
+        .style("fill", "#69b3a2");
 }
 
 function updateHistogram(){
-  if(selection != histogramCurSelection){
-    console.log("hello");
+  if(selection != histogramCurSelection){;
     makeHistogram();
   }else{
+    console.log((data.xSelected && (data.xSelected.length > 0)));
     d3.select(".histogram")
-    .select("svg")
-    .selectAll("rect")
-    .data(histogram(data.xSelection && data.xSelection.length > 0 ? data.xSelection : data[selection.x]))
-    .transition()
-    .duration(1000)
-    .attr("transform", function(d){ return "translate(" + histogramX(d.x0) + "," + histogramY(d.length) + ")"; })
-    .attr("height", function(d) { return histogramHeight - histogramY(d.length); })
+      .select("svg")
+      .selectAll("rect")
+      .data(histogram(data.xSelected && data.xSelected.length > 0 ? data.xSelected : data[selection.x]))
+      .transition()
+      .duration(1000)
+      .attr("transform", function(d){ return "translate(" + histogramX(d.x0) + "," + histogramY(d.length) + ")"; })
+      .attr("height", function(d) { return histogramHeight - histogramY(d.length); })
   }
 }
