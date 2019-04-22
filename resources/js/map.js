@@ -259,9 +259,6 @@ function mapMouseMove() {
           }
         }
       });
-    setTimeout(() => {
-      updateGlobalSelectedData();
-    }, 100);
   }
 }
 
