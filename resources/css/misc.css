@@ -1,0 +1,13 @@
+.infotext {
+    position: relative;
+    padding-left: 30px;
+    font-size: 18px;
+}
+
+.infotitle{
+    font-size: 24px;
+}
+
+.infosubtitle{
+    font-size: 18px;
+}

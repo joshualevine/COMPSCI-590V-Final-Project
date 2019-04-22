@@ -7,12 +7,14 @@
   <link type="text/css" href="./resources/css/index.css" rel="stylesheet">
   <link type="text/css" href="./resources/css/map.css" rel="stylesheet">
   <link type="text/css" href="./resources/css/heatmap.css" rel="stylesheet">
+  <link type="text/css" href="./resources/css/misc.css" rel="stylesheet">
   <script type="text/javascript" src="./resources/js/d3.v4.min.js"></script>
   <script type="text/javascript" src="./resources/js/topojson.v2.min.js"></script>
   <script type="text/javascript" src="./resources/js/data.js"></script>
   <script type="text/javascript" src="./resources/js/correlation.js"></script>
   <script type="text/javascript" src="./resources/js/heatmap.js"></script>
   <script type="text/javascript" src="./resources/js/forcegraph.js"></script>
+  <script type="text/javascript" src="./resources/js/infoview.js"></script>
 </head>
 
 <body class="visualization">
@@ -21,13 +23,14 @@
   </div>
   <div class="misc-container">
     <svg viewBox="0 0 500 500" class="misc"></svg>
+    <div class="infoview-div"></div>
   </div>
   <div class="county-map-container">
     <svg viewBox="0 0 960 600" class="county-map"></svg>
   </div>
 
-  <script type="text/javascript" src="./resources/js/index.js"></script>
   <script type="text/javascript" src="./resources/js/map.js"></script>
+  <script type="text/javascript" src="./resources/js/index.js"></script>
 </body>
 
 </html>
