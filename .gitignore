@@ -2,3 +2,4 @@
 *.xls
 utils/.env
 utils/out/
+server.py
