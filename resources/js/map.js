@@ -157,7 +157,7 @@ function createMap() {
     // create zoom handler 
     let zoom_handler = d3
       .zoom()
-      .scaleExtent([1, 3])
+      .scaleExtent([0.5, 3])
       .translateExtent([[-100, -100], [960, 600]])
       .on('end', () => {
         if (d3.event.type == 'end') mapMouseUp();
