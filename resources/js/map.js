@@ -259,9 +259,6 @@ function mapMouseMove() {
           }
         }
       });
-    setTimeout(() => {
-      updateGlobalSelectedData();
-    }, 100);
   }
 }
 
@@ -362,5 +359,5 @@ function updateGlobalSelectedData() {
   }
   data.xSelected = xSelected;
   data.ySelected = ySelected;
-  updateSelections();
+  updateMiscGraph();
 }
