@@ -107,7 +107,7 @@ function makeHeatmap(){
             }
             updateScatterPlot();
             renderCircles();
-            updateInfoView(data,variables);
+            updateMiscGraph();
         })
         .append('title')
 		.text(function(d) {

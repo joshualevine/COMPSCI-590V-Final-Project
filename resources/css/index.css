@@ -108,12 +108,8 @@
 
 svg{
   position: absolute;
-  top: 0px;
+  bottom: 0px;
   left: 0px;
   height: 100%;
   width: 100%;
-}
-
-div{
-  white-space: pre-line;
 }

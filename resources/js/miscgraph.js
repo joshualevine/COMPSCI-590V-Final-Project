@@ -20,7 +20,6 @@ function makeMiscGraph(){
 
 function updateMiscGraph(){
     let graph = document.getElementById('mySelect').value;
-    console.log(graph);
 
     for(let g in miscGraphs){
         let div = document.getElementsByClassName(g)[0];
