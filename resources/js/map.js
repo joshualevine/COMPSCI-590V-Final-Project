@@ -106,12 +106,13 @@ function renderCircles() {
     .transition()
     .duration(1000)
     .attr('fill', (d, i) => {
-      let o = 127 + Math.round(128 * ((color[i] - minC) / (maxC - minC)));
-      return 'rgb(0, 0, ' + o + ')';
+      let o = 100 - Math.round(80 * ((color[i] - minC) / (maxC - minC))) + 20;
+      //return 'rgb(0, 0, ' + o + ')';
+      return 'hsl(' + 240 + ',100%,' + o + '%)';
     })
     .attr('r', (d, i) => {
       if (isNaN(d.x) || isNaN(d.y)) return 0;
-      let r = 8 * ((size[i] - minS) / (maxS - minS));
+      let r = 7 * ((size[i] - minS) / (maxS - minS)) + 1;
       return r;
     });
 }

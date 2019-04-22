@@ -1,4 +1,4 @@
-function makeForceGraph(correlations, variables){
+function makeForceGraph(data, variables){
     let svg = d3.select(".misc-container")
                 .select("svg");
 
@@ -81,4 +81,8 @@ function makeForceGraph(correlations, variables){
         d.fx = null;
         d.fy = null;
     }
+}
+
+function updateForceGraph(data, variables){
+    return;
 }
