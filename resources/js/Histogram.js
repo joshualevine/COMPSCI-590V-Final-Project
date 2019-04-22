@@ -27,7 +27,8 @@ function makeHistogram(){
   
   // X axis: scale and draw:
   let x = d3.scaleLinear()
-      .domain([dataInfo[selection.x].min, dataInfo[selection.x].max])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .domain([dataInfo[selection.x].min - 0.5*dataInfo[selection.x].stdv, 
+               dataInfo[selection.x].max + 0.5*dataInfo[selection.x].stdv])
       .range([0, width]);
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -45,35 +46,45 @@ function makeHistogram(){
   // Y axis: scale and draw:
   let y = d3.scaleLinear()
       .range([height, 0]);
-      y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+      y.domain([0, d3.max(bins, function(d) { return d.length; })]);
   svg.append("g")
       .call(d3.axisLeft(y));
 
   histogramY = y;
   // append the bar rectangles to the svg element
+  if(data.xSelected && data.xSelected.length > 0){
+    bins = histogram(data.xSelected);
+  }
   svg.selectAll("rect")
       .data(bins)
       .enter()
       .append("rect")
         .attr("x", 1)
-        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("transform", function(d) { 
+          return "translate(" + x(d.x0) + "," + y(d.length) + ")"; 
+        })
         .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
         .attr("height", function(d) { return height - y(d.length); })
-        .style("fill", "#69b3a2")
+        .style("fill", "#69b3a2");
 }
 
 function updateHistogram(){
-  if(selection != histogramCurSelection){
-    console.log("hello");
+  if(selection != histogramCurSelection){;
     makeHistogram();
   }else{
+    console.log((data.xSelected && (data.xSelected.length > 0)));
     d3.select(".histogram")
-    .select("svg")
-    .selectAll("rect")
-    .data(histogram(data.xSelection && data.xSelection.length > 0 ? data.xSelection : data[selection.x]))
-    .transition()
-    .duration(1000)
-    .attr("transform", function(d){ return "translate(" + histogramX(d.x0) + "," + histogramY(d.length) + ")"; })
-    .attr("height", function(d) { return histogramHeight - histogramY(d.length); })
+      .select("svg")
+      .selectAll("rect")
+      .data(histogram(data.xSelected && data.xSelected.length > 0 ? 
+                                data.xSelected : data[selection.x]))
+      .transition()
+      .duration(1000)
+      .attr("transform", function(d){ 
+        return "translate(" + histogramX(d.x0) 
+                   + "," + histogramY(d.length) + ")"; })
+      .attr("height", function(d){ 
+        return histogramHeight - histogramY(d.length); 
+      })
   }
 }
