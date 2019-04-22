@@ -68,14 +68,18 @@ function makeScatterPlot(){
         .attr("cx", function (d,i) { return scatterXscale(xdata[i]); } )
         .attr("r", 5) // radius of circle
         .attr("fill", "black")  
-        .style("opacity", 0.075);
+        .style("opacity", 0.075)
+        .append('title')
+		.text(function(d,i) {
+            return data["County"][i] + ", " + data["State"][i];
+		});
     
     // text label for the x axis
     scattermain.append("text")
         .attr("class", "xlabel")             
         .attr("transform",
                 "translate(" + (scatterwidth/2) + " ," + 
-                            (scatterheight + scattermargin.top + 20) + ")")
+                            (scatterheight + scattermargin.top + 25) + ")")
         .style("text-anchor", "middle")
         .text(variableData[selection.x]['Variable Name']);
 
@@ -83,7 +87,7 @@ function makeScatterPlot(){
     scattermain.append("text")
         .attr("class", "ylabel")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - scattermargin.left - 30)
+        .attr("y", 0 - scattermargin.left - 40)
         .attr("x",0 - (scatterheight / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -91,7 +95,7 @@ function makeScatterPlot(){
 }
 
 function updateSelections(){
-    main.select(".dots")
+    scattermain.select(".dots")
         .transition("changecolor")
         .selectAll("circle")
         .attr("fill", function(d,i){
