@@ -5,7 +5,7 @@ function makeHistogram(){
   let height = 500 - margin.bottom - margin.top;
 
   // append the svg object to the body of the page
-  var svg = d3.select(".misc")
+  var svg = d3.select(".histogram")
     .select("svg")
     .append("g")
     .attr("class", "histogram-container")

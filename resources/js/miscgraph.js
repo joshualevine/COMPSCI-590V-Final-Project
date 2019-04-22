@@ -9,30 +9,26 @@ function makeMiscGraph(){
 
     for(let graph in miscGraphs){
         miscGraphs[graph].make();
+        let div = document.getElementsByClassName(graph)[0];
+        if (graph === currentMisc) {
+            div.style.visibility = 'visible';
+        } else {
+            div.style.visibility = 'hidden';
+        }
     }
-    d3.select('.misc-container')
-        .selectAll('div')
-        .attr('visibility', function(){
-            if(d3.select(this).classed(currentMisc)){
-                return 'visible';
-            }else{
-                return 'hidden';
-            }
-        });
 }
 
 function updateMiscGraph(){
     let graph = document.getElementById('mySelect').value;
     console.log(graph);
 
-    d3.select('.misc-container')
-        .selectAll('div')
-        .attr('visibility', function(){
-            if(d3.select(this).classed(graph)){
-                return 'visible'
-            }else{
-                return 'hidden'
-            }
-        });
+    for(let g in miscGraphs){
+        let div = document.getElementsByClassName(g)[0];
+        if (g === graph) {
+            div.style.visibility = 'visible';
+        } else {
+            div.style.visibility = 'hidden';
+        }
+    }
     miscGraphs[graph].update();
 }
