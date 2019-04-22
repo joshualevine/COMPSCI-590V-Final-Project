@@ -35,7 +35,64 @@ function makeInfoView(){
                 });
         });
     }else if(totalSelected == 1){
+
+        let selectedCounty;
+
+        for(let i=0; i<selectedCounties.length; i++){
+            if(selectedCounties[i]){
+                selectedCounty = i;
+                break;
+            }
+        }
+
         div.html(null);
+
+        div.append('div')
+            .attr('class', 'infotitle')
+            .text(data['County'][i]);
+
+        div.append('div')
+            .attr('class', 'infosubtitle')
+            .text(data['State'][i]);
+
+        div.selectAll('.infotext')
+            .data(variables)
+            .enter()
+            .append('div')
+            .attr('class', 'infotext')
+            .text(function(d){
+                return d + ': ' + data[d][selectedCounty]
+            })
+            .attr('color', function(d){
+                let std = (data[d][selectedCounty] - dataInfo[d].mean)/
+                            dataInfo[d].stdv;
+                let lightness = 50 - 50*(Math.abs(Math.tanh(std)));
+                let hue = 0;
+                if(std > 0){
+                    hue = 240;
+                }
+                return 'hsl(' + hue + ',100%,' + lightness + '%)';
+            });
+    }else{
+        div.html(null);
+
+        selectionInfo = {};
+        selectionInfo[selection.x] = {
+            max: d3.max(data.xSelected),
+            min: d3.min(data.xSelected),
+            mean: Math.round(d3.mean(data.xSelected) * 100)/100,
+            median: d3.median(data.xSelected),
+            stdv: Math.round(Math.sqrt(d3.variance(data.xSelected) * 100))/100
+        };
+
+        selectionInfo[selection.y] = {
+            max: d3.max(data.ySelected),
+            min: d3.min(data.ySelected),
+            mean: Math.round(d3.mean(data.ySelected) * 100)/100,
+            median: d3.median(data.ySelected),
+            stdv: Math.round(Math.sqrt(d3.variance(data.ySelected) * 100))/100
+        };
+
         let text = div.selectAll('div')
             .data(selectedVariables)
             .enter()
@@ -50,26 +107,25 @@ function makeInfoView(){
             d3.select(this)
                 .append('div')
                 .selectAll('div')
-                .data(Object.entries(dataInfo[d]))
+                .data(Object.entries(selectionInfo[d]))
                 .enter()
                 .append('div')
                 .attr('class', 'infotext')
                 .text(function(d){
                     return d[0] + ': ' + d[1];
-                })
-                .append('span')
-                .attr('color', function(d){
-                    //standard deviations from mean
-                    let lightness = 10;
+                });
+                /*.attr('color', function(d){
+                    let std = (data[d][selectedCounty] - dataInfo[d].mean)/
+                                dataInfo[d].stdv;
+                    let lightness = 50 - 50*(Math.abs(Math.tanh(std)));
                     let hue = 0;
-                    if(d.value>0){
+                    if(std > 0){
                         hue = 240;
                     }
                     return 'hsl(' + hue + ',100%,' + lightness + '%)';
-                });
+                });*/
         });
-    }else{
-        div.html(null);
+
     }
 }
 
