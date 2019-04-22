@@ -42,7 +42,50 @@
 .options-zoom {
   display: inline-block;
   border-radius: 8px;
+  margin-right: 5px;
   padding: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.options-map-reset {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 5px;
+  margin-right: 20px;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.options-text-2 {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.options-reset {
+  display: inline-block;
+  border-radius: 8px;
+  margin-right: 5px;
+  padding: 5px;
+  cursor: pointer;
+  background-color: rgb(135, 142, 202);
+  border: 1px solid black;
+}
+
+.options-merge {
+  display: inline-block;
+  border-radius: 8px;
+  margin-right: 5px;
+  padding: 5px;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.options-remove {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 5px;
+  margin-right: 5px;
   cursor: pointer;
   border: 1px solid black;
 }
