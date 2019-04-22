@@ -3,6 +3,7 @@
   width: 100%;
   height: calc(100% - 40px);
   bottom: 0;
+  border: 2px solid black;
 }
 
 .selection-rect {
@@ -20,6 +21,7 @@
 
 .county-circle {
   opacity: 0.2;
+  pointer-events: none;
 }
 
 .county-borders {
