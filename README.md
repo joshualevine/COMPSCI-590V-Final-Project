@@ -1,6 +1,6 @@
 # COMPSCI 590V Final Project
 
-This is our final project for UMass Amherst's CS 590V Data Visualization and Analysis class.
+This is our final project for UMass Amherst's COMPSCI 590V Data Visualization and Analysis class.
 
 ## Getting Started
 
@@ -11,7 +11,6 @@ These instructions will get you a copy of the project up and running on your loc
 You would need the following items to run the preprocessing script:
 
 ```
-Python 2
 Python 3
 ```
 
@@ -26,7 +25,20 @@ six==1.12.0
 xlrd==1.2.0
 ```
 
-The rest of the project can be run with a regular internet browser.
+The rest of the project can be run with a regular internet browser, assuming the project is hosted on any HTTP server from the root of the directory, and then navigating to <`IP`>/index.html.
+
+### Virtual Enviornment
+
+If you would like to use a virtual environment, we suggest `virtualenv`:
+
+```console
+pip install virtualenv
+virtualenv -p python3 --no-site-packages .env
+source .env/bin/activate
+pip install -r utils/requirements.txt
+```
+
+This will start a virtual python3 enviornment and install all the necessary packages.
 
 ### Installing
 
@@ -35,10 +47,12 @@ You can simply download the entirety of our repository and everything will be in
 
 ## Built With
 
-Javascript, specifically with the D3 framework.
-Python
-HTML
-CSS
+Javascript, specifically with the D3 framework:
+
+* Python 3
+* HTML
+* CSS
+* JavaScript
 
 ## Authors
 
