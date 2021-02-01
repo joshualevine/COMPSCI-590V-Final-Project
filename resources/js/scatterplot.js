@@ -1,131 +1,143 @@
-let margin;
-let width;
-let height;
-let main;
-let g;
+let scattermargin;
+let scatterwidth;
+let scatterheight;
+let scattermain;
+let scatterg;
+let scatterXaxis;
+let scatterYaxis;
+let scatterXscale;
+let scatterYscale;
 
 function makeScatterPlot(){
         // data that you want to plot, I've used separate arrays for x and y values
-    let xdata = [];
-    let ydata = [];
-
-    var xaxis = selection["x"];
-    var yaxis = selection["y"];
-
-    for(let i = 0; i < data[xaxis].length; i++){
-        xdata.push(data[xaxis][i]);
-    }
-
-    for(let i = 0; i < data[yaxis].length; i++){
-        ydata.push(data[yaxis][i]);
-    }
+    let xdata = data[selection.x];
+    let ydata = data[selection.y];
 
     // size and margins for the chart
-    margin = {top: 15, right: 15, bottom: 10, left: 60};
+    scattermargin = {top: 15, right: 15, bottom: 60, left: 20};
 
-    width = 500 - margin.left - margin.right;
-    height = 500 - margin.top - margin.bottom;
+    scatterwidth = 500 - scattermargin.left - scattermargin.right;
+    scatterheight = 500 - scattermargin.top - scattermargin.bottom;
 
-    var x = d3.scaleLinear()
+    scatterXscale = d3.scaleLinear()
         .domain([d3.min(xdata)-1, d3.max(xdata)])  // the range of the values to plot
-        .range([ 0, width ]);        // the pixel range of the x-axis
+        .range([ 0, scatterwidth ]);        // the pixel range of the x-axis
 
-    var y = d3.scaleLinear()
+    scatterYscale = d3.scaleLinear()
         .domain([d3.min(ydata)-1, d3.max(ydata)])
-        .range([ height, 0 ]);
+        .range([ scatterheight, 0 ]);
 
     // the chart object, includes all margins
-    var chart = d3.select('.misc')
-    .attr('width', width + margin.right + margin.left)
-    .attr('height', height + margin.top + margin.bottom)
+    let chart = d3.select('.scatterplot')
+        .select('svg')
+    //.attr('width', width + margin.right + margin.left)
+    //.attr('height', height + margin.top + margin.bottom)
 
     // the main object where the chart and axis will be drawn
-    main = chart.append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('class', 'main')   
+    scattermain = chart.append('g')
+        .attr('transform', 'translate(' + scattermargin.left + ',' 
+                                        + scattermargin.top + ')')
+        .attr('width', scatterwidth)
+        .attr('height', scatterheight)
+        .attr('class', 'main')   
 
     // draw the x axis
-    var xAxis = d3.axisBottom()
-    .scale(x);
+    scatterXaxis = d3.axisBottom()
+        .scale(scatterXscale);
 
-    main.append('g')
-    .attr('transform', 'translate(0,' + height + ')')
-    .attr('class', 'yaxis')
-    .call(xAxis);
+    scattermain.append('g')
+        .attr('class', 'xaxis')
+        .attr('transform', 'translate(0,' + scatterheight + ')')
+        .call(scatterXaxis);
 
     // draw the y axis
-    var yAxis = d3.axisLeft()
-    .scale(y);
+    scatterYaxis = d3.axisLeft()
+        .scale(scatterYscale);
 
-    main.append('g')
-    .attr('transform', 'translate(0,0)')
-    .attr('class', 'xaxis')
-    .call(yAxis);
+    scattermain.append('g')
+        .attr('class', 'yaxis')
+        .call(scatterYaxis);
 
     // draw the graph object
-    g = main.append("svg:g").attr("class", "dots");  
+    scatterg = scattermain.append("svg:g").attr("class", "dots");  
 
-    g.selectAll(".scatter-dots")
-    .data(ydata)
-    .enter().append("svg:circle") 
-    .attr("cy", function (d,i) { return y(ydata[i]); } )
-    .attr("cx", function (d,i) { return x(xdata[i]); } )
-    .attr("r", 5) // radius of circle
-    .attr("fill", function(d,i){
-        if(i < 1500){
-            return "red";
-        }
-        else{
-            return "blue";
-        }
-    })  
-    .style("opacity", 0.025);
+    scatterg.selectAll(".scatter-dots")
+        .data(ydata)
+        .enter().append("svg:circle") 
+        .attr("cy", function (d,i) { return scatterYscale(ydata[i]); } )
+        .attr("cx", function (d,i) { return scatterXscale(xdata[i]); } )
+        .attr("r", 5) // radius of circle
+        .attr("fill", "black")  
+        .style("opacity", 0.075)
+        .append('title')
+		.text(function(d,i) {
+            return data["County"][i] + ", " + data["State"][i];
+		});
+    
+    // text label for the x axis
+    scattermain.append("text")
+        .attr("class", "xlabel")             
+        .attr("transform",
+                "translate(" + (scatterwidth/2) + " ," + 
+                            (scatterheight + scattermargin.top + 25) + ")")
+        .style("text-anchor", "middle")
+        .text(variableData[selection.x]['Variable Name']);
+
+    // text label for the y axis
+    scattermain.append("text")
+        .attr("class", "ylabel")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - scattermargin.left - 40)
+        .attr("x",0 - (scatterheight / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text(variableData[selection.y]['Variable Name']);    
+}
+
+function updateSelections(){
+    scattermain.select(".dots")
+        .transition("changecolor")
+        .selectAll("circle")
+        .attr("fill", function(d,i){
+            if (selectedCounties[i] && selectedCounties[i] === 1){
+                return "red";
+            }
+            else{
+                return "black";
+            }
+        });
 }
 
 function updateScatterPlot(){
-    let xdata = [];
-    let ydata = [];
 
-    var xaxis = selection["x"];
-    var yaxis = selection["y"];
+    let xdata = data[selection.x];
+    let ydata = data[selection.y];
 
+    scatterXscale.domain([d3.min(xdata)-1, d3.max(xdata)]);
+    scatterYscale.domain([d3.min(ydata)-1, d3.max(ydata)]);
 
-    for(let i = 0; i < data[xaxis].length; i++){
-        xdata.push(data[xaxis][i]);
-    }
-    
-    for(let i = 0; i < data[yaxis].length; i++){
-        ydata.push(data[yaxis][i]);
-    }
-
-    var x = d3.scaleLinear()
-        .domain([d3.min(xdata)-1, d3.max(xdata)])  // the range of the values to plot
-        .range([ 0, width ]);        // the pixel range of the x-axis
-
-    var y = d3.scaleLinear()
-        .domain([d3.min(ydata)-1, d3.max(ydata)])
-        .range([ height, 0 ]);
-    var xAxis = d3.axisBottom()
-        .scale(x);
-
-    var yAxis = d3.axisLeft()
-        .scale(y);
-
-    main.select(".xaxis")
+    scattermain.select(".xaxis")
         .transition()
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis);
-    main.select(".yaxis")
-        .transition()
-        .attr('transform', 'translate(0,0)')
-        .call(yAxis);
+        .duration(1000)
+        .call(scatterXaxis);
 
-    main.select(".dots")
+    scattermain.select(".yaxis")
+        .transition()
+        .duration(1000)
+        .call(scatterYaxis);
+
+    scattermain.select(".xlabel")
+        .text(variableData[selection.x]['Variable Name']);
+        
+    scattermain.select(".ylabel")
+    .text(variableData[selection.y]['Variable Name']);
+
+    scattermain.select(".dots")
         .selectAll("circle")
-        .transition()
-        .duration(300)
-        .attr("cy", function (d,i) { return y(ydata[i]); } )
-        .attr("cx", function (d,i) { return x(xdata[i]); } );
+        .transition("move")
+        .duration(1000)
+        .attr("cy", function (d,i) { return scatterYscale(ydata[i]); } )
+        .attr("cx", function (d,i) { return scatterXscale(xdata[i]); } );
+
+    updateSelections();
 }   

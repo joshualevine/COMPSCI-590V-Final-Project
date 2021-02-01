@@ -1,0 +1,25 @@
+Given the original Excel dataset, we have included two Python 3 scripts for data cleaning:
+
+1. clean_data.py
+2. combine_data.py
+
+clean_data.py
+-------------
+
+"clean_data.py" is responsible for loading in the Excel sheet, performing leading and trailing whitespace removal, type inference, and outputing one CSV per sheet. At the top of the file in the "GLOBAL" section, you will see three variables:
+
+1. INFILE - the location of the original Excel file to load in
+2. OUTDIR - the directory (get created if not exists in the current directory this script is run from) to save all the output CSVs
+3. SHEET_NAMES - (DO NOT CHANGE) The proper names for each sheet in the project that we defined. 
+
+Change the first two if you want to run it yourself. The result will be 12 CSVs saved to the OUTDIR.
+
+combine_data.py
+---------------
+
+"clean_data.py" is responsible for loading each cleaned CSV and selecting the variables we manually decided as being important to show in our project. At the top of the file in the "GLOBAL" section, you will see two variables:
+
+1. INDIR - the directory containing all the output CSVs from "clean_data.py"
+2. SHEETS - (DO NOT CHANGE) The proper names for each sheet in the project that we defined, along with the variables we want to capture. 
+
+Change the first variable if you want to run it yourself. The result will be 1 CSVs being saved to the INDIR.

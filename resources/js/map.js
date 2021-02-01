@@ -4,7 +4,7 @@ let selectedCounties = [];
 let currentMapTransform;
 
 let mode = 'select'; // select or zoom
-let selectType = 'box'; // box or click
+let selectType = 'reset'; // reset, merge or remove
 
 function prepareDataForCircles(us) {
   // for each county, compute signed area of all polgyons and select largest one
@@ -66,7 +66,12 @@ function createMap() {
     if (error) throw error;
 
     // alphabetize counties for easer sorted rendering later
-    let d = us.objects.counties.geometries;
+    let d = [];
+    for (let item of us.objects.counties.geometries) {
+      if (data.FIPS.indexOf(parseInt(item.id)) > -1) {
+        d.push(item);
+      }
+    }
     d.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
     us.objects.counties.geometries = d;
 
@@ -80,6 +85,44 @@ function createMap() {
       .append('path')
       .attr('class', 'county-path')
       .attr('d', mapPath)
+      .on('click', (d, i) => {
+        if (mode === 'select') {
+          d3.select('.county-map')
+            .selectAll('.county-path')
+            .attr('fill', (d, k) => {
+              if (selectType === 'reset') {
+                if (i === k) {
+                  return colorCounty(k, 1);
+                } else {
+                  return colorCounty(k, 0);
+                }
+              } else if (selectType === 'merge') {
+                if (i === k) {
+                  return colorCounty(k, 1);
+                } else {
+                  if (selectedCounties[k] === 1) {
+                    return colorCounty(k, 1);
+                  } else {
+                    return colorCounty(k, 0);
+                  }
+                }
+              } else { // remove
+                if (i === k) {
+                  return colorCounty(k, 0);
+                } else {
+                  if (selectedCounties[k] === 1) {
+                    return colorCounty(k, 1);
+                  } else {
+                    return colorCounty(k, 0);
+                  }
+                }
+              }
+            });
+          setTimeout(() => {
+            updateGlobalSelectedData();
+          }, 100);
+        }
+      });
 
     // create the county borders
     container
@@ -117,7 +160,10 @@ function createMap() {
       .on('mouseup', mapMouseUp);
 
     // create zoom handler 
-    let zoom_handler = d3.zoom()
+    let zoom_handler = d3
+      .zoom()
+      .scaleExtent([0.5, 3])
+      .translateExtent([[-100, -100], [960, 600]])
       .on('end', () => {
         if (d3.event.type == 'end') mapMouseUp();
       })
@@ -125,6 +171,7 @@ function createMap() {
         if (mode === 'zoom') {
           currentMapTransform = d3.event.transform;
           container.attr('transform', currentMapTransform);
+          scaleCircles();
         } else {
           mapMouseMove();
         }
@@ -136,6 +183,7 @@ function createMap() {
 }
 
 function renderCircles() {
+  updateGlobalSelectedData();
   let size = data[selection.x];
   let color = data[selection.y];
   let minS = Math.min(...size);
@@ -147,13 +195,14 @@ function renderCircles() {
     .transition()
     .duration(1000)
     .attr('fill', (d, i) => {
-      let o = 127 + Math.round(128 * ((color[i] - minC) / (maxC - minC)));
-      return 'rgb(0, 0, ' + o + ')';
+      let o = 100 - Math.round(80 * ((color[i] - minC) / (maxC - minC))) + 20;
+      //return 'rgb(0, 0, ' + o + ')';
+      return 'hsl(' + 240 + ',100%,' + o + '%)';
     })
     .attr('r', (d, i) => {
       if (isNaN(d.x) || isNaN(d.y)) return 0;
-      let r = 8 * ((size[i] - minS) / (maxS - minS));
-      return r;
+      let r = 7 * ((size[i] - minS) / (maxS - minS)) + 1;
+      return r / ((currentMapTransform || {}).k || 1);
     });
 }
 
@@ -164,7 +213,7 @@ function mapMouseDown() {
 }
 
 function mapMouseMove() {
-  if (mouseDownPoint && mode === 'select' && selectType === 'box') {
+  if (mouseDownPoint && mode === 'select') {
     let point = d3.mouse(d3.select('.county-map').node());
     point = transformZoomPoint(point);
     let x = 0,
@@ -193,16 +242,32 @@ function mapMouseMove() {
       .selectAll('.county-path')
       .attr('fill', (d, i) => {
         for (let p of countyPoints[i]) {
+          if (selectType === 'merge' && selectedCounties[i] === 1) {
+            return colorCounty(i, 1);
+          }
           let xCheck = (p[0] >= x) && (p[0] <= (x + w));
           let yCheck = (p[1] >= y) && (p[1] <= (y + h));
           if (xCheck && yCheck) {
-            selectedCounties[i] = 1;
-            return 'red';
+            if (selectType === 'remove') {
+              return colorCounty(i, 0);
+            } else {
+              return colorCounty(i, 1);
+            }
           }
         }
-        selectedCounties[i] = 0;
-        return 'rgb(88, 145, 88)';
+        if (selectType !== 'remove') {
+          return colorCounty(i, 0);
+        } else {
+          if (selectedCounties[i] === 1) {
+            return colorCounty(i, 1);
+          } else {
+            return colorCounty(i, 0);
+          }
+        }
       });
+    setTimeout(() => {
+      updateGlobalSelectedData();
+    }, 100);
   }
 }
 
@@ -212,19 +277,62 @@ function mapMouseUp() {
     .select('.selection-rect')
     .attr('width', 0)
     .attr('height', 0)
+  setTimeout(() => {
+    updateGlobalSelectedData();
+  }, 100);
 }
 
 function selectMapButton(cls) {
   let select = document.getElementsByClassName('options-select')[0];
   let zoom = document.getElementsByClassName('options-zoom')[0];
+  let reset = document.getElementsByClassName('options-reset')[0];
+  let merge = document.getElementsByClassName('options-merge')[0];
+  let remove = document.getElementsByClassName('options-remove')[0];
   if (cls === 'select') {
     mode = 'select';
     select.style.backgroundColor = 'rgb(135, 142, 202)';
     zoom.style.backgroundColor = 'white';
-  } else {
+  } else if (cls === 'zoom') {
     mode = 'zoom';
     select.style.backgroundColor = 'white';
     zoom.style.backgroundColor = 'rgb(135, 142, 202)';
+  } else if (cls === 'reset') {
+    selectType = 'reset';
+    reset.style.backgroundColor = 'rgb(135, 142, 202)';
+    merge.style.backgroundColor = 'white';
+    remove.style.backgroundColor = 'white';
+    mode = 'select';
+    select.style.backgroundColor = 'rgb(135, 142, 202)';
+    zoom.style.backgroundColor = 'white';
+  } else if (cls === 'merge') {
+    selectType = 'merge';
+    reset.style.backgroundColor = 'white';
+    merge.style.backgroundColor = 'rgb(135, 142, 202)';
+    remove.style.backgroundColor = 'white';
+    mode = 'select';
+    select.style.backgroundColor = 'rgb(135, 142, 202)';
+    zoom.style.backgroundColor = 'white';
+  } else if (cls === 'remove') {
+    selectType = 'remove';
+    reset.style.backgroundColor = 'white';
+    merge.style.backgroundColor = 'white';
+    remove.style.backgroundColor = 'rgb(135, 142, 202)';
+    mode = 'select';
+    select.style.backgroundColor = 'rgb(135, 142, 202)';
+    zoom.style.backgroundColor = 'white';
+  } else { // reset map!
+    var container = d3.select('.county-map').select('g');
+    container.attr('transform', d3.zoomIdentity);
+    currentMapTransform = d3.zoomIdentity;
+    scaleCircles();
+    d3.select('.county-map')
+      .selectAll('.county-path')
+      .attr('fill', (d, i) => {
+        return colorCounty(i, 0);
+      });
+    setTimeout(() => {
+      updateGlobalSelectedData();
+    }, 100);
   }
 }
 
@@ -237,4 +345,45 @@ function transformZoomPoint(point) {
     point[1] = (point[1] - y) / k;
   }
   return point;
+}
+
+function colorCounty(index, type) {
+  if (type === 0) {
+    selectedCounties[index] = 0;
+    return 'white';
+  } else {
+    selectedCounties[index] = 1;
+    return 'rgb(189,41,0)';
+  }
+}
+
+function updateGlobalSelectedData() {
+  // update selected counties in global data structure
+  let xSelected = [],
+    ySelected = [];
+  for (let i = 0; i < data[selection.x].length; i++) {
+    if (selectedCounties[i] === 1) {
+      xSelected.push(data[selection.x][i]);
+      ySelected.push(data[selection.y][i]);
+    }
+  }
+  data.xSelected = xSelected;
+  data.ySelected = ySelected;
+  updateMiscGraph();
+}
+
+function scaleCircles() {
+  let size = data[selection.x];
+  let color = data[selection.y];
+  let minS = Math.min(...size);
+  let maxS = Math.max(...size);
+  let minC = Math.min(...color);
+  let maxC = Math.max(...color);
+  d3.select('.county-map')
+    .selectAll('circle')
+    .attr('r', (d, i) => {
+      if (isNaN(d.x) || isNaN(d.y)) return 0;
+      let r = 7 * ((size[i] - minS) / (maxS - minS)) + 1;
+      return r / ((currentMapTransform || {}).k || 1);
+    });
 }

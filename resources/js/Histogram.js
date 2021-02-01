@@ -75,7 +75,6 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
 
-  // set the parameters for the histogram
   var histogram = d3.histogram()
       .value(function(d) { return d.price; })   // I need to give the vector of value
       .domain(x.domain())  // then the domain of the graphic
@@ -91,7 +90,6 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
   svg.append("g")
       .call(d3.axisLeft(y));
 
-  // append the bar rectangles to the svg element
   svg.selectAll("rect")
       .data(bins)
       .enter()
@@ -103,3 +101,4 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
         .style("fill", "#69b3a2")
 
 });
+
